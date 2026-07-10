@@ -24,7 +24,7 @@ body{
 .card{
     width:90%;
     max-width:450px;
-    background:white;
+    background:#fff;
     border-radius:20px;
     padding:30px;
     text-align:center;
@@ -36,73 +36,103 @@ h1{
     margin-bottom:20px;
 }
 
-.info{
-    margin:20px 0;
-}
-
-.label{
-    font-weight:bold;
-    color:#555;
-    margin-bottom:5px;
-}
-
-.value{
-    font-size:20px;
-    color:#111;
-    word-break:break-word;
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+    margin-top:15px;
 }
 
 button{
-    margin-top:25px;
     width:100%;
     padding:15px;
+    margin-top:15px;
     border:none;
-    border-radius:12px;
+    border-radius:10px;
     background:#2563eb;
-    color:white;
-    font-size:17px;
+    color:#fff;
+    font-size:16px;
     cursor:pointer;
-    transition:.3s;
 }
 
 button:hover{
     background:#1d4ed8;
 }
 
+.label{
+    font-weight:bold;
+    margin-top:15px;
+    color:#555;
+}
+
+.value{
+    font-size:20px;
+    margin-top:5px;
+    word-break:break-word;
+}
+
 #mesaj{
     margin-top:15px;
-    color:green;
-    font-weight:bold;
+    color:red;
+}
+
+#ibanSayfa{
+    display:none;
 }
 </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Banka Bilgileri</h1>
+<div class="card" id="giris">
+    <h1>Giriş</h1>
+    <p>Devam etmek için şifreyi giriniz.</p>
 
-    <div class="info">
-        <div class="label">Ad Soyad</div>
-        <div class="value">Mehmet Çakar</div>
-    </div>
+    <input type="password" id="sifre" placeholder="Şifre">
 
-    <div class="info">
-        <div class="label">IBAN</div>
-        <div class="value" id="iban">TR86000100901093719005001</div>
-    </div>
-
-    <button onclick="kopyala()">IBAN'ı Kopyala</button>
+    <button onclick="kontrol()">Giriş Yap</button>
 
     <div id="mesaj"></div>
 </div>
 
-<script>
-function kopyala(){
-    const iban=document.getElementById("iban").innerText;
+<div class="card" id="ibanSayfa">
+    <h1>Banka Bilgileri</h1>
 
-    navigator.clipboard.writeText(iban).then(()=>{
-        document.getElementById("mesaj").innerText="✅ IBAN kopyalandı.";
-    });
+    <div class="label">Ad Soyad</div>
+    <div class="value">Mehmet Çakar</div>
+
+    <div class="label">IBAN</div>
+    <div class="value" id="iban">TR86000100901093719005001</div>
+
+    <button onclick="kopyala()">IBAN'ı Kopyala</button>
+
+    <div id="kopyaMesaj" style="margin-top:15px;color:green;"></div>
+</div>
+
+<script>
+const DOGRU_SIFRE = "606_f";
+
+function kontrol(){
+    const sifre = document.getElementById("sifre").value;
+
+    if(sifre === DOGRU_SIFRE){
+        document.getElementById("giris").style.display="none";
+        document.getElementById("ibanSayfa").style.display="block";
+    }else{
+        document.getElementById("mesaj").innerText="❌ Şifre hatalı!";
+    }
+}
+
+document.getElementById("sifre").addEventListener("keypress", function(e){
+    if(e.key==="Enter"){
+        kontrol();
+    }
+});
+
+function kopyala(){
+    navigator.clipboard.writeText(document.getElementById("iban").innerText);
+    document.getElementById("kopyaMesaj").innerText="✅ IBAN kopyalandı.";
 }
 </script>
 
